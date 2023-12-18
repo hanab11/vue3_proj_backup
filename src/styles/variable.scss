@@ -1,2 +1,17 @@
 // scss全局变量
-$global-color: red;
+
+// 左侧菜单的宽度、最小宽度、背景色
+$base-menu-width: 250px;
+$base-menu-min-width: 50px;
+$base-menu-background: #242424;
+
+// logo容器高度、内边距、右侧文字大小
+$base-logo-height: 50px;
+$base-logo-padding: 10px;
+$base-logo-title-fontSize: 26px;
+
+// 对齐顶部导航的高度 = logo容器高度 + 内边距 * 2
+$base-tabbar-height: $base-logo-height + $base-logo-padding * 2;
+
+// 内容展示的内边距
+$base-main-padding: 20px;

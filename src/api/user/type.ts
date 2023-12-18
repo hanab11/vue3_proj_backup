@@ -4,8 +4,10 @@ export interface loginFormData {
   password: string
 }
 
+// 可选属性：成功返回token，失败返回message
 interface dataType {
-  token: string
+  token?: string
+  message?: string
 }
 // 定义服务器返回登录接口的数据的ts类型
 export interface loginResponseData {
@@ -13,7 +15,7 @@ export interface loginResponseData {
   data: dataType
 }
 
-interface checkUser {
+interface userInfoType {
   userInfo: {
     userId: number
     avatar: string
@@ -29,5 +31,5 @@ interface checkUser {
 // 定义服务器返回用户信息的数据的ts类型
 export interface userInfoReponseData {
   code: number
-  data: checkUser
+  data: userInfoType
 }

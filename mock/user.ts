@@ -57,14 +57,15 @@ export default [
     response: (request) => {
       //获取请求头携带token
       const token = request.headers.token
-      //查看用户信息是否包含有次token用户
+      //查看用户信息是否包含有此token的用户
       const checkUser = createUserList().find((item) => item.token === token)
       //没有返回失败的信息
       if (!checkUser) {
         return { code: 201, data: { message: '获取用户信息失败' } }
       }
-      //如果有返回成功信息
-      return { code: 200, data: { checkUser } }
+      //如果有返回成功信息 即用户信息
+      const userInfo = checkUser
+      return { code: 200, data: { userInfo } }
     }
   }
 ]

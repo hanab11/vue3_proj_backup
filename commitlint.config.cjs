@@ -6,6 +6,7 @@ module.exports = {
       2,
       'always',
       [
+        'add',
         'feat',
         'fix',
         'docs',
@@ -15,8 +16,8 @@ module.exports = {
         'test',
         'chore',
         'revert',
-        'build',
-      ],
+        'build'
+      ]
     ],
     'type-case': [0],
     'type-empty': [0],
@@ -24,6 +25,6 @@ module.exports = {
     'scope-case': [0],
     'subject-full-stop': [0, 'never'],
     'subject-case': [0, 'never'],
-    'header-max-length': [0, 'always', 72],
-  },
+    'header-max-length': [0, 'always', 72]
+  }
 }
