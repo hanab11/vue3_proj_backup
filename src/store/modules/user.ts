@@ -1,8 +1,8 @@
 // 用户相关的小仓库模块
 import { defineStore } from 'pinia'
 // 引入接口：请求登录、请求用户信息
-import { reqLogin, reqUserInfo } from '@/api/user'
-// 引入ts数据类型
+import { reqLogin, reqLogout, reqUserInfo } from '@/api/user'
+// 引入用户数据的ts类型
 import type { loginFormData } from '@/api/user/type'
 import type { UserState } from './types/type'
 // 引入本地存储数据的工具方法
@@ -23,47 +23,53 @@ const useUserStore = defineStore('User', {
   },
   // 异步+业务逻辑（只关心异步返回的结果，再根据result返回成功or失败promise，不去管后续行为）
   actions: {
-    // 用户登录方法，reqLogin需要传参，userLogin需要接收参数
-    // 传入参数data报红，显示默认any类型，就需要给data标注数据类型（data: xxx）
+    // 用户登录方法，因为reqLogin需要传参，用userLogin接收参数data，ts类型loginFormData
     async userLogin(data: loginFormData) {
-      const result = await reqLogin(data) // 异步请求会返回promise对象，使用async await，注result自动推断ts类型
+      const result = await reqLogin(data) // 注：result自动推断ts类型，异步请求返回promise对象，使用async await
+      //console.log(result) // 打印result:{code, message, data, ok} 注：data成功是token，失败是提示信息
 
       // 登录成功 200 -> 获得 token，并存储到state
       // 登录失败 201 -> 获得 失败信息
       if (result.code === 200) {
-        this.token = result.data.token as string
+        this.token = result.data as string
         // 由于pinia/vuex并非持久化，所以必须本地存储一份持久化token（cookie也可以做）
-        SET_TOKEN(result.data.token as string)
+        SET_TOKEN(result.data as string)
 
         // 保证当前async函数，返回成功的promise，暂时写死
         return 'OK'
       } else {
         // 返回失败的promise，用reject方法，传入参数最好是error实例对象（等价error = new Error()）
-        return Promise.reject(new Error(result.data.message))
+        return Promise.reject(new Error(result.data))
       }
     },
 
     // 用户信息方法，获取用户信息需要带着token请求，在请求头里封装
     async userInfo() {
-      const result = await reqUserInfo() // 异步请求，等待响应结果，注result自动推断ts类型
+      const result = await reqUserInfo() // 注：result自动推断ts类型，异步请求，等待响应结果
 
       // 判断成功，获得用户信息存储到state
       if (result.code === 200) {
-        this.username = result.data.userInfo.username
-        this.avatar = result.data.userInfo.avatar
+        this.username = result.data.name
+        this.avatar = result.data.avatar
         return 'ok'
       } else {
-        return Promise.reject('获取用户信息失败')
+        return Promise.reject(new Error(result.message))
       }
     },
 
     // 用户登出方法
-    userLogout() {
-      // 目前没有mock接口：退出登录接口（通知服务器本地用户唯一标识失效）
-      this.token = ''
-      //this.username = ''
-      //this.avatar = ''
-      REMOVE_TOKEN() // 清除本地存储的token
+    async userLogout() {
+      const result = await reqLogout() // 退出登录接口，异步请求（通知服务器本地用户唯一标识失效）
+
+      if (result.code == 200) {
+        this.token = ''
+        this.username = ''
+        this.avatar = ''
+        REMOVE_TOKEN() // 清除本地存储的token
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(result.message))
+      }
     }
   },
   // 计算属性

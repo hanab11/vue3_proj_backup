@@ -63,7 +63,7 @@ let $route = useRoute()
 let userStore = useUserStore()
 
 // 收集表单账密
-let loginForm = reactive({ username: 'admin', password: '111111' })
+let loginForm = reactive({ username: 'admin', password: 'atguigu123' })
 // 控制按钮样式-loading
 let isLoading = ref(false)
 // 获取el-form组件实例对象，注：起名不要用elForm，容易冲突！！！

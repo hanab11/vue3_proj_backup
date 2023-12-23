@@ -66,9 +66,9 @@ const fullScreen = () => {
 }
 
 // 退出登录按钮的回调
-const logout = () => {
+const logout = async () => {
   // 先发请求给服务器（退出登录接口）再清空用户仓库数据（登出方法）
-  userStore.userLogout()
+  await userStore.userLogout()
   // 编程式路由跳转，path目标路由，query路由地址传递参数（当前路由地址）
   $router.push({
     path: '/login',
